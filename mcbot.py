@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 import argparse
 import random
 
@@ -15,8 +16,7 @@ def createChain(text, nprefix):
         # Make prefix
         prefix = ''
         for j in reversed(range(nprefix)): prefix += text[idx-(j+1)] + ' '
-        prefix = prefix[:-1]
-        
+        prefix = prefix[:-1]    
 
         #Add to chain
         if prefix not in chain: chain[prefix] = [suffix]
@@ -24,14 +24,17 @@ def createChain(text, nprefix):
 
     return chain
 
-def generateMessage(chain):
+def generateMessage(chain, nprefix):
     
     prefix = random.choice(chain.keys())
-    message = prefix
+    message = prefix.capitalize()
+
+    #Walk the chain
     while not message.endswith('.'):
         suffix = random.choice(chain[prefix])
         message += ' ' + suffix
-        prefix = suffix
+        #Make the prefix for the next step        
+        prefix = prefix.split(' ',1)[1] + ' '+ suffix if nprefix != 1 else suffix
 
     print(message)
 
@@ -46,4 +49,4 @@ if __name__ == '__main__':
 
     text = readFile(args.infile)
     chain = createChain(text, nprefix)
-    generateMessage(chain)
+    generateMessage(chain, nprefix)
