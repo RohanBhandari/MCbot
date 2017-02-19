@@ -29,14 +29,22 @@ def generateMessage(chain, nprefix):
     prefix = random.choice(chain.keys())
     message = prefix.capitalize()
 
+    count, total = 0., 1
+    count = 0. if len(chain[prefix])<2 else 1    
     #Walk the chain
     while not message.endswith('.'):
+        #Get non-uniequeness count
+        if len(chain[prefix])>1: count += 1
+        total += 1
+        
+        #Get the suffix
         suffix = random.choice(chain[prefix])
         message += ' ' + suffix
         #Make the prefix for the next step        
         prefix = prefix.split(' ',1)[1] + ' '+ suffix if nprefix != 1 else suffix
 
     print(message)
+    print("(Message had "+str(round(count/total*100,1))+"% non-unique steps)")
 
 if __name__ == '__main__':
 
